@@ -26,11 +26,11 @@ function saveWords(words){
 // ------------------------
 // API ROUTES
 // ------------------------
-app.get("https://wordle-answer-checker-be.onrender.com/api/used-words", (req, res) => {
+app.get("/api/used-words", (req, res) => {
     res.status(200).json(loadWords())
 })
 
-app.post("https://wordle-answer-checker-be.onrender.com/api/add-word", (req, res) => {
+app.post("/api/add-word", (req, res) => {
     const { word } = req.body
     const used = loadWords()
     if( word && ! used.includes(word) ){
@@ -40,7 +40,7 @@ app.post("https://wordle-answer-checker-be.onrender.com/api/add-word", (req, res
     res.json({ status: "ok", used_words: used })
 })
 
-app.post("https://wordle-answer-checker-be.onrender.com/api/check-word", (req, res) => {
+app.post("/api/check-word", (req, res) => {
     const { word } = req.body
     try {
         const result = checkWord(word)
