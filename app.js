@@ -4,7 +4,7 @@ document.getElementById("req_word").focus()
 
 const addToUsed = async(word_to_check) => {
 
-    await fetch("https://wordle-answer-checker.onrender.com/api/check-word", {
+    await fetch("https://wordle-answer-checker-be.onrender.com/api/check-word", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word: word_to_check })
@@ -17,7 +17,7 @@ const addToUsed = async(word_to_check) => {
             return alert(word_to_check + " was not found in the English dictionary so it was not added to used words.")
         }
 
-        await fetch("https://wordle-answer-checker.onrender.com/api/add-word", {
+        await fetch("https://wordle-answer-checker-be.onrender.com/api/add-word", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ word: word_to_check })
@@ -75,7 +75,7 @@ const checkWord = async(word_to_check, el_info) => {
     instructions.classList.add("hidden")
     instructions.classList.remove("flex")
 
-    const retrieve = await fetch("https://wordle-answer-checker.onrender.com/api/used-words").then(r => r.json())
+    const retrieve = await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words").then(r => r.json())
         .then(used_words => {
             console.log(used_words)
             // Clear previous results
