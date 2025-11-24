@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script type="module" crossorigin src="/assets/index-CPEZKPXM.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-DIMIUYEM.css">
+    </head>
+
+    <body class="flex bg-linear-to-b from-slate-950 to-slate-900 text-slate-100">
+        <form class="flex flex-col w-160 items-start p-6 rounded shadow mx-auto pt-20"
+            onsubmit="checkWord(
+                document.getElementById('req_word').value,
+                document.getElementById('info'),
+            ); return false;"
+        >
+            <div class="flex items-center mx-auto w-fit">
+                <label for="req_word">Desired word: </label>
+                <input type="text" id="req_word"
+                    class="w-32 py-2 px-3 mx-6 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
+                />
+                <button type="submit" class="bg-emerald-700 px-4 py-[11px] rounded shadow uppercase font-bold">
+                    check
+                </button>
+            </div>
+
+            <p id="instructions" class="flex text-sm text-slate-400 mt-16 text-center">
+                A specific NYT Wordle answer has never repeated. This utility enables you to check if the word you are considering has ever been used and should be eliminated from consideration. If the word is not in the list of used answers, you will have the option of adding it.
+            </p>
+
+            <p id="info" class="block w-fit mx-auto mt-10 text-red-500">
+            </p>
+
+            <button type="button" id="add" onclick="addToUsed(document.getElementById('req_word').value); return false;"
+                class="hidden bg-emerald-700 mt-6 px-4 py-2 rounded shadow uppercase font-bold"
+            >
+                add to used answers
+            </button>
+
+            <p class="hidden mt-4 text-emerald-600" id="result">
+                <span class="font-bold underline" id="added_word"></span>
+                &nbsp;
+                <span id="rest"></span>
+            </p>
+        </form>
+
+    </body>
+</html>
