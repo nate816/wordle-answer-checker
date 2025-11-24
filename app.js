@@ -2,6 +2,16 @@ import data from "./data.js"
 
 document.getElementById("req_word").focus()
 
+// cron job to avoid slow starts on free tier hosting
+setInterval(async () => {
+    try {
+        const res = await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words")
+        console.log("Pinged backend:", res.status)
+    } catch (err) {
+        console.error(err)
+    }
+}, 10 * 60 * 1000) // every 10 minutes
+
 const addToUsed = async(word_to_check) => {
 
     await fetch("https://wordle-answer-checker-be.onrender.com/api/check-word", {
