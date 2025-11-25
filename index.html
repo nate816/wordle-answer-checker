@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="./main.css" rel="stylesheet">
+        <link href="./all.min.css" rel="stylesheet">
     </head>
 
     <body class="flex bg-linear-to-b from-slate-950 to-slate-900 text-slate-100">
@@ -15,23 +16,29 @@
         >
             <div class="flex items-center mx-auto w-fit">
                 <label for="req_word">Word: </label>
-                <input type="text" id="req_word"
-                    class="w-32 py-2 px-3 mx-2 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
-                />
-                <button type="submit" class="bg-emerald-700 px-4 py-[11px] rounded shadow uppercase font-bold">
+                <div class="flex items-center relative">
+                    <input type="text" id="req_word" maxlength="5"
+                        class="w-36 py-2 px-3 mx-2 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
+                    />
+                    <img class="absolute right-3 w-7 h-7 p-1 cursor-pointer"
+                        src="./img/FaTimes.png"
+                        onclick="document.getElementById('req_word').value = ''"
+                    />
+                </div>
+                <button type="submit" class="bg-emerald-700 px-4 py-[11px] rounded shadow uppercase font-bold cursor-pointer">
                     check
                 </button>
             </div>
 
             <p id="instructions" class="flex text-sm text-slate-400 mt-16 text-center">
-                A specific NYT Wordle answer has never repeated. This utility enables you to check if any five-letter word has ever been used and should be eliminated from consideration. If the word is not in the list of used answers, you will have the option of adding it.
+                A specific NYT Wordle answer will never repeat. This utility enables you to check if any five-letter word has ever been used and should be eliminated from consideration. If the word is not in the list of used answers, you will have the option of adding it.
             </p>
 
             <p id="info" class="block w-fit mx-auto mt-10">
             </p>
 
             <button type="button" id="add" onclick="addToUsed(document.getElementById('req_word').value); return false;"
-                class="hidden bg-emerald-700 mt-6 mx-auto px-4 py-2 rounded shadow uppercase font-bold"
+                class="hidden bg-emerald-700 mt-6 mx-auto px-4 py-2 rounded shadow uppercase font-bold cursor-pointer"
             >
                 add to used answers
             </button>
