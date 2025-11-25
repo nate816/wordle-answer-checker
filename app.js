@@ -2,6 +2,8 @@ import data from "./data.js"
 
 document.getElementById("req_word").focus()
 
+const { all_words } = data
+
 /**
  * hide the passed element(s)
  * @param {Element[]}
@@ -42,7 +44,7 @@ const addToUsed = async(word_to_check) => {
             return alert(word_to_check + " was not found in the English dictionary so it was not added to used words.")
         }
 
-        if( ! data.all_words.includes(word_to_check) ){
+        if( ! all_words.includes(word_to_check) ){
             return alert(word_to_check + " isn't in the Wordle dictionary, so it can't be added to used answers.")
         }
 
@@ -79,8 +81,6 @@ const addToUsed = async(word_to_check) => {
 const checkWord = async(word_to_check, el_info) => {
 
     word_to_check = word_to_check.toUpperCase()
-
-    const { all_words } = data
 
     if( word_to_check.includes(" ") ){
         return el_info.textContent = "Spaces aren't allowed."
