@@ -2,16 +2,6 @@ import data from "./data.js"
 
 document.getElementById("req_word").focus()
 
-// cron job to avoid slow starts on free tier hosting
-setInterval(async () => {
-    try {
-        const res = await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words")
-        console.log("Pinged backend:", res.status)
-    } catch (err) {
-        console.error(err)
-    }
-}, 10 * 60 * 1000) // every 10 minutes
-
 /**
  * hide the passed element(s)
  * @param {Element[]}
@@ -52,6 +42,10 @@ const addToUsed = async(word_to_check) => {
             return alert(word_to_check + " was not found in the English dictionary so it was not added to used words.")
         }
 
+        if( ! data.all_words.includes(word_to_check) ){
+            return alert(word_to_check + " isn't in the Wordle dictionary, so it can't be added to used answers.")
+        }
+
         await fetch("https://wordle-answer-checker-be.onrender.com/api/add-word", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -74,7 +68,7 @@ const addToUsed = async(word_to_check) => {
                 showEls([pResult, pWord, pRest])
 
                 pWord.textContent = word_to_check
-                pRest.textContent = " has been added to the Wordle dictionary."
+                pRest.textContent = " has been added to used answers."
 
             }
         })
