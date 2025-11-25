@@ -12,6 +12,28 @@ setInterval(async () => {
     }
 }, 10 * 60 * 1000) // every 10 minutes
 
+/**
+ * hide the passed element(s)
+ * @param {Element[]}
+ */
+const hideEls = (els) => {
+    for(const el of els){
+        el.classList.add("hidden")
+        el.classList.remove("flex")
+    }
+}
+
+/**
+ * hide the passed element(s)
+ * @param {Element[]}
+ */
+const showEls = (els) => {
+    for(const el of els){
+        el.classList.add("flex")
+        el.classList.remove("hidden")
+    }
+}
+
 const addToUsed = async(word_to_check) => {
 
     await fetch("https://wordle-answer-checker-be.onrender.com/api/check-word", {
@@ -24,6 +46,9 @@ const addToUsed = async(word_to_check) => {
         word_to_check = word_to_check.toUpperCase()
 
         if( ! data.valid ){
+            // hide the old add button
+            const btnAdd = document.getElementById("add")
+            hideEls([btnAdd])
             return alert(word_to_check + " was not found in the English dictionary so it was not added to used words.")
         }
 
@@ -40,18 +65,13 @@ const addToUsed = async(word_to_check) => {
 
                 // hide the old add button
                 const btnAdd = document.getElementById("add")
-                btnAdd.classList.add("hidden")
-                btnAdd.classList.remove("flex")
+                hideEls([btnAdd])
 
                 // show the result information
                 const pResult = document.getElementById("result")
                 const pWord = document.getElementById("added_word")
                 const pRest = document.getElementById("rest")
-
-                for(const el of [pResult, pWord, pRest]){
-                    el.classList.remove("hidden")
-                    el.classList.add("flex")
-                }
+                showEls([pResult, pWord, pRest])
 
                 pWord.textContent = word_to_check
                 pRest.textContent = " has been added to the Wordle dictionary."
@@ -74,99 +94,92 @@ const checkWord = async(word_to_check, el_info) => {
 
     const pWord = document.getElementById("added_word")
     const pRest = document.getElementById("rest")
-    for(const el of [pWord, pRest]){
-        el.classList.add("hidden")
-        el.classList.remove("flex")
-    }
+    hideEls([pWord, pRest])
 
     if( word_to_check && word_to_check.length === 5 ){
 
-    const instructions = document.getElementById("instructions")
-    instructions.classList.add("hidden")
-    instructions.classList.remove("flex")
+        const instructions = document.getElementById("instructions")
+        hideEls([instructions])
 
-    const retrieve = await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words").then(r => r.json())
-        .then(used_words => {
-            console.log(used_words)
-            // Clear previous results
-            el_info.textContent = ""
+        await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words").then(r => r.json())
+            .then(used_words => {
+                console.log(used_words)
+                // Clear previous results
+                el_info.textContent = ""
 
-            const addLine = (label, value) => {
-                const line = document.createElement("div")
-                line.className = "py-4 flex" // flex to align label and value
+                const addLine = (label, value) => {
+                    const line = document.createElement("div")
+                    line.className = "py-4 flex" // flex to align label and value
 
-                // Label (fixed width)
-                const labelSpan = document.createElement("span")
-                labelSpan.className = "w-72 inline-block"
+                    // Label (fixed width)
+                    const labelSpan = document.createElement("span")
+                    labelSpan.className = "w-72 inline-block"
 
-                // Split the label so we can make the word bold
-                const [beforeWord, afterWord] = label.split(word_to_check)
+                    // Split the label so we can make the word bold
+                    const [beforeWord, afterWord] = label.split(word_to_check)
 
-                // Before word
-                labelSpan.appendChild(document.createTextNode(beforeWord))
+                    // Before word
+                    labelSpan.appendChild(document.createTextNode(beforeWord))
 
-                // Bold word
-                const wordSpan = document.createElement("span")
-                wordSpan.className = "font-bold"
-                wordSpan.textContent = word_to_check
-                labelSpan.appendChild(wordSpan)
+                    // Bold word
+                    const wordSpan = document.createElement("span")
+                    wordSpan.className = "font-bold"
+                    wordSpan.textContent = word_to_check
+                    labelSpan.appendChild(wordSpan)
 
-                // After word
-                labelSpan.appendChild(document.createTextNode(afterWord))
+                    // After word
+                    labelSpan.appendChild(document.createTextNode(afterWord))
 
-                // Value
-                const valueSpan = document.createElement("span")
-                valueSpan.className = "font-bold "
-                valueSpan.className += (value.includes("YES")) ? "text-green-600" : "text-red-600"
-                valueSpan.textContent = value
+                    // Value
+                    const valueSpan = document.createElement("span")
+                    valueSpan.className = "font-bold "
+                    valueSpan.className += (value.includes("YES")) ? "text-green-600" : "text-red-600"
+                    valueSpan.textContent = value
 
-                line.appendChild(labelSpan)
-                line.appendChild(valueSpan)
-                el_info.appendChild(line)
-            }
-
-            const notUsed = ! used_words.includes(word_to_check)
-            const inDict = all_words.includes(word_to_check)
-
-            addLine(
-                "Has " + word_to_check + " never been used?",
-                ( notUsed ? "YES" : "NO")
-            )
-
-            addLine(
-                "Is " + word_to_check + " in the Wordle dictionary?",
-                ( inDict ? "YES" : "NO")
-            )
-
-            if( notUsed ){
-                const btnAdd = document.getElementById("add")
-                btnAdd.classList.remove("hidden")
-                btnAdd.classList.add("flex")
-            }
-
-            // potential problems with dictionary
-            const mismatches = []
-
-            for(const word of used_words){
-                if( ! all_words.includes(word) ){
-                    mismatches.push(word)
+                    line.appendChild(labelSpan)
+                    line.appendChild(valueSpan)
+                    el_info.appendChild(line)
                 }
-            }
 
-            if( mismatches.length ){
-                console.log("\nNOTE: some used words are not in the so-called dictionary...")
-                console.log(JSON.stringify(mismatches))
-            }
-        })
+                const notUsed = ! used_words.includes(word_to_check)
+                const inDict = all_words.includes(word_to_check)
+
+                addLine(
+                    "Has " + word_to_check + " never been used?",
+                    ( notUsed ? "YES" : "NO")
+                )
+
+                addLine(
+                    "Is " + word_to_check + " in the Wordle dictionary?",
+                    ( inDict ? "YES" : "NO")
+                )
+
+                if( notUsed ){
+                    const btnAdd = document.getElementById("add")
+                    showEls([btnAdd])
+                }
+
+                // potential problems with dictionary
+                const mismatches = []
+
+                for(const word of used_words){
+                    if( ! all_words.includes(word) ){
+                        mismatches.push(word)
+                    }
+                }
+
+                if( mismatches.length ){
+                    console.log("\nNOTE: some used words are not in the so-called dictionary...")
+                    console.log(JSON.stringify(mismatches))
+                }
+            })
     }
 
     else {
         const btnAdd = document.getElementById("add")
         const instructions = document.getElementById("instructions")
-        for(const el of [btnAdd, instructions]){
-            el.classList.add("hidden")
-            el.classList.remove("flex")
-        }
+        hideEls([btnAdd, instructions])
+
         el_info.textContent = "You didn't enter a word or it's not a five-letter word."
     }
 }
