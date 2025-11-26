@@ -50,7 +50,8 @@ async function loadWords(){
         const res = await fetch(url)
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
-        const ret = [...prevWords, json.solution]
+        console.log(json.solution)
+        const ret = [...prevWords, json.solution.toUpperCase()]
         return ret
     } catch(err){
         console.error("Failed to fetch yesterday's word:", err)

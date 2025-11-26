@@ -90,6 +90,7 @@ const checkWord = async(word_to_check, el_info) => {
     hideEls([pWord, pRest])
 
     if( word_to_check && word_to_check.length === 5 ){
+        word_to_check = word_to_check.toUpperCase()
 
         const instructions = document.getElementById("instructions")
         hideEls([instructions])
