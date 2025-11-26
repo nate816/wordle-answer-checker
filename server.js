@@ -30,20 +30,32 @@ const formatDateForMySql = function($date){
 }
 
 async function loadWords(){
-    const prevWords = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
+    let prevWords = []
+
+    // Read previous words safely
+    try {
+        const data = fs.readFileSync(DATA_FILE, "utf8")
+        prevWords = JSON.parse(data)
+        if (!Array.isArray(prevWords)) prevWords = []
+    } catch(err){
+        console.warn("Failed to read or parse used_words.json, starting empty:", err.message)
+        prevWords = []
+    }
+
     const yesterday = subDays(new Date(), 1)
     const formatted = formatDateForMySql(yesterday)
     const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
 
     try {
         const res = await fetch(url)
+        if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const ret = [...prevWords, json.solution]
         return ret
     } catch(err){
-        console.error(err)
+        console.error("Failed to fetch yesterday's word:", err)
+        return prevWords   // fallback to existing words
     }
-
 }
 
 // ------------------------
