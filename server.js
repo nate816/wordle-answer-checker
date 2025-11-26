@@ -1,27 +1,50 @@
 const express = require("express")
 const cors = require("cors")
+const fs = require("fs")
 const path = require("path")
 const fetch = require("node-fetch")
+const DATA_FILE = path.join(__dirname, "used_words.json")
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-// IMPORT THE CHECKER
+// IMPORT THE SPELL CHECKER
 const checkWord = require("./server/check_word.js")
 
+const subDays = (date, days) => {
+    date = date instanceof Date ? date : new Date(date)
+    return date.setDate(date.getDate() - days)
+}
+
+const formatDateTimeForMySql = function($date){
+    if (!$date){ return }
+    var date = $date instanceof Date ? $date :
+    new Date(
+        typeof $date === "string" ?
+        $date.replace(/-/g,'/') : $date
+    )
+    return String(date.getFullYear())
+    + '-' + String(date.getMonth() + 1).padStart(2, '0')
+    + '-' + String(date.getDate()).padStart(2, '0')
+    + ' ' + String(date.getHours()).padStart(2, '0')
+    + ":" + String(date.getMinutes()).padStart(2, '0')
+    + ":" + String(date.getSeconds()).padStart(2, '0')
+}
+
 async function loadWords(){
-    const url = "https://www.nytimes.com/svc/wordle/v2/wordle.json"
+    const prevWords = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
+    const yesterday = subDays(new Date(), 1)
+    const formatted = formatDateTimeForMySql(yesterday)
+    const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
 
-    const res = await fetch(url)
-    if(!res.ok){
-        throw new Error("Failed to fetch Wordle archive")
-    }
-
-    const json = await res.json()
-
-    // Extract just solutions
-    return json.map(day => day.solution)
+    await fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            const ret = [...prevWords, data.solution]
+            console.log(ret)
+            return ret
+        })
 }
 
 // ------------------------
