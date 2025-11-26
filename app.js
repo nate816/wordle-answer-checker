@@ -26,6 +26,7 @@ const showEls = (els) => {
     }
 }
 
+/*
 const addToUsed = async(word_to_check) => {
 
     await fetch("https://wordle-answer-checker-be.onrender.com/api/check-word", {
@@ -75,8 +76,8 @@ const addToUsed = async(word_to_check) => {
             }
         })
     })
-
 }
+*/
 
 const checkWord = async(word_to_check, el_info) => {
 
@@ -98,6 +99,7 @@ const checkWord = async(word_to_check, el_info) => {
         await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words").then(r => r.json())
             .then(used_words => {
                 console.log(used_words)
+
                 // Clear previous results
                 el_info.textContent = ""
 
@@ -148,11 +150,6 @@ const checkWord = async(word_to_check, el_info) => {
                     ( inDict ? "YES" : "NO")
                 )
 
-                if( notUsed ){
-                    const btnAdd = document.getElementById("add")
-                    showEls([btnAdd])
-                }
-
                 // potential problems with dictionary
                 const mismatches = []
 
@@ -170,13 +167,11 @@ const checkWord = async(word_to_check, el_info) => {
     }
 
     else {
-        const btnAdd = document.getElementById("add")
         const instructions = document.getElementById("instructions")
-        hideEls([btnAdd, instructions])
-
+        hideEls([instructions])
         el_info.textContent = "You didn't enter a word or it's not a five-letter word."
     }
 }
 
 window.checkWord = checkWord
-window.addToUsed = addToUsed
+// window.addToUsed = addToUsed

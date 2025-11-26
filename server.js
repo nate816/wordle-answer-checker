@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
-const fs = require("fs")
 const path = require("path")
+const fetch = require("node-fetch")
 
 const app = express()
 app.use(cors())
@@ -10,34 +10,36 @@ app.use(express.json())
 // IMPORT THE CHECKER
 const checkWord = require("./server/check_word.js")
 
-const DATA_FILE = path.join(__dirname, "used_words.json")
+async function loadWords(){
+    const results = []
+    const startDate = new Date("2022-02-10")
+    const endDate = new Date()
 
-function loadWords(){
-    if( ! fs.existsSync(DATA_FILE) ){
-        return []
+    for(let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)){
+        const yyyy = d.getFullYear()
+        const mm = String(d.getMonth() + 1).padStart(2, "0")
+        const dd = String(d.getDate()).padStart(2, "0")
+        const url = `https://www.nytimes.com/svc/wordle/v2/${yyyy}-${mm}-${dd}.json`
+
+        try {
+            const res = await fetch(url)
+            if(!res.ok) continue
+            const json = await res.json()
+            results.push(json.solution)
+        } catch(err){
+            continue
+        }
     }
-    return JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
-}
-
-function saveWords(words){
-    fs.writeFileSync(DATA_FILE, JSON.stringify(words, null, 2))
+    console.log(results)
+    return results
 }
 
 // ------------------------
 // API ROUTES
 // ------------------------
 app.get("/api/used-words", (req, res) => {
+    console.log("Request received for /api/used-words")
     res.status(200).json(loadWords())
-})
-
-app.post("/api/add-word", (req, res) => {
-    const { word } = req.body
-    const used = loadWords()
-    if( word && ! used.includes(word) ){
-        used.push(word)
-        saveWords(used)
-    }
-    res.json({ status: "ok", used_words: used })
 })
 
 app.post("/api/check-word", (req, res) => {
