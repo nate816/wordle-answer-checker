@@ -63,7 +63,9 @@ async function loadWords(){
 // ------------------------
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
-    res.status(200).json(loadWords())
+    const words = await loadWords()
+    console.log("Returning words:", words)
+    res.status(200).json(words)
 })
 
 app.post("/api/check-word", (req, res) => {
