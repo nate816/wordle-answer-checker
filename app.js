@@ -81,8 +81,6 @@ const addToUsed = async(word_to_check) => {
 
 const checkWord = async(word_to_check, el_info) => {
 
-    word_to_check = word_to_check.toUpperCase()
-
     if( word_to_check.includes(" ") ){
         return el_info.textContent = "Spaces aren't allowed."
     }

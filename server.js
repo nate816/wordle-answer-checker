@@ -11,27 +11,17 @@ app.use(express.json())
 const checkWord = require("./server/check_word.js")
 
 async function loadWords(){
-    const results = []
-    const startDate = new Date("2022-02-10")
-    const endDate = new Date()
+    const url = "https://www.nytimes.com/svc/wordle/v2/wordle.json"
 
-    for(let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)){
-        const yyyy = d.getFullYear()
-        const mm = String(d.getMonth() + 1).padStart(2, "0")
-        const dd = String(d.getDate()).padStart(2, "0")
-        const url = `https://www.nytimes.com/svc/wordle/v2/${yyyy}-${mm}-${dd}.json`
-
-        try {
-            const res = await fetch(url)
-            if(!res.ok) continue
-            const json = await res.json()
-            results.push(json.solution)
-        } catch(err){
-            continue
-        }
+    const res = await fetch(url)
+    if(!res.ok){
+        throw new Error("Failed to fetch Wordle archive")
     }
-    console.log(results)
-    return results
+
+    const json = await res.json()
+
+    // Extract just solutions
+    return json.map(day => day.solution)
 }
 
 // ------------------------
