@@ -17,7 +17,7 @@ const subDays = (date, days) => {
     return date.setDate(date.getDate() - days)
 }
 
-const formatDateTimeForMySql = function($date){
+const formatDateForMySql = function($date){
     if (!$date){ return }
     var date = $date instanceof Date ? $date :
     new Date(
@@ -27,15 +27,12 @@ const formatDateTimeForMySql = function($date){
     return String(date.getFullYear())
     + '-' + String(date.getMonth() + 1).padStart(2, '0')
     + '-' + String(date.getDate()).padStart(2, '0')
-    + ' ' + String(date.getHours()).padStart(2, '0')
-    + ":" + String(date.getMinutes()).padStart(2, '0')
-    + ":" + String(date.getSeconds()).padStart(2, '0')
 }
 
 async function loadWords(){
     const prevWords = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
     const yesterday = subDays(new Date(), 1)
-    const formatted = formatDateTimeForMySql(yesterday)
+    const formatted = formatDateForMySql(yesterday)
     const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
 
     await fetch(url)
