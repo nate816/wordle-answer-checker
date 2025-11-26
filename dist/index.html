@@ -2,8 +2,12 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <script type="module" crossorigin src="/assets/index-DWpAdBqN.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-DIMIUYEM.css">
+        <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32-BzoLSODX.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16-C2ZOdgJL.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <title>Wordle Answer Checker</title>
+      <script type="module" crossorigin src="/assets/index-D2g5Sqns.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-DxsuG7tC.css">
     </head>
 
     <body class="flex bg-linear-to-b from-slate-950 to-slate-900 text-slate-100">
@@ -14,27 +18,39 @@
             ); return false;"
         >
             <div class="flex items-center mx-auto w-fit">
-                <label for="req_word">Desired word: </label>
-                <input type="text" id="req_word"
-                    class="w-32 py-2 px-3 mx-6 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
-                />
-                <button type="submit" class="bg-emerald-700 px-4 py-[11px] rounded shadow uppercase font-bold">
+                <label for="req_word">Word: </label>
+                <div class="flex items-center relative">
+                    <input type="text" id="req_word" maxlength="5"
+                        class="w-36 py-2 px-3 mx-2 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
+                    />
+                    <img class="absolute right-3 w-7 h-7 p-1 cursor-pointer"
+                        src="/assets/FaTimes-C5RIxfLY.png"
+                        onclick="window.location.href = '/'"
+                    />
+                </div>
+                <button type="submit" class="bg-emerald-700 px-4 py-[11px] rounded shadow uppercase font-bold cursor-pointer">
                     check
                 </button>
             </div>
 
-            <p id="instructions" class="flex text-sm text-slate-400 mt-16 text-center">
-                A specific NYT Wordle answer has never repeated. This utility enables you to check if the word you are considering has ever been used and should be eliminated from consideration. If the word is not in the list of used answers, you will have the option of adding it.
+            <span id="instructions" class="text-sm text-slate-400! mt-16 text-center">
+                <p>
+                    A specific NYT Wordle answer will never repeat. This utility enables you to check if a given five-letter word has ever been used and should be eliminated from consideration.
+                </p>
+                <p class="text-xs mt-6">
+                    All used answers are publicly available, and yesterday's answer is fetched from the official NYT archive. Today's answer is not included.
+                </p>
+            </span>
+
+            <p id="info" class="block w-fit mx-auto mt-10">
             </p>
 
-            <p id="info" class="block w-fit mx-auto mt-10 text-red-500">
-            </p>
-
-            <button type="button" id="add" onclick="addToUsed(document.getElementById('req_word').value); return false;"
-                class="hidden bg-emerald-700 mt-6 px-4 py-2 rounded shadow uppercase font-bold"
+            <!-- <button type="button" id="add"
+                onclick="addToUsed(document.getElementById('req_word').value); return false;"
+                class="hidden bg-emerald-700 mt-6 mx-auto px-4 py-2 rounded shadow uppercase font-bold cursor-pointer"
             >
                 add to used answers
-            </button>
+            </button> -->
 
             <p class="hidden mt-4 text-emerald-600" id="result">
                 <span class="font-bold underline" id="added_word"></span>

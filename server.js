@@ -50,8 +50,8 @@ async function loadWords(){
         const res = await fetch(url)
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
-        console.log(json.solution)
-        const ret = [...prevWords, json.solution.toUpperCase()]
+        const yesterday_answer = json.solution.toUpperCase()
+        const ret = [...prevWords, yesterday_answer]
         return ret
     } catch(err){
         console.error("Failed to fetch yesterday's word:", err)
@@ -65,7 +65,7 @@ async function loadWords(){
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
     const words = await loadWords()
-    console.log("Returning words:", words)
+    // console.log("Returning words:", words)
     res.status(200).json(words)
 })
 
