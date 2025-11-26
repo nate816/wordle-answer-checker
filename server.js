@@ -25,6 +25,7 @@ async function loadWords(){
             const res = await fetch(url)
             if(!res.ok) continue
             const json = await res.json()
+            console.log(json)
             results.push(json.solution)
         } catch(err){
             continue
