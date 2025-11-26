@@ -30,7 +30,7 @@ const formatDateForMySql = function($date){
 }
 
 async function loadWords(){
-    const prevWords = fs.readFileSync(DATA_FILE, "utf8")
+    const prevWords = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
     const yesterday = subDays(new Date(), 1)
     const formatted = formatDateForMySql(yesterday)
     const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
@@ -38,7 +38,7 @@ async function loadWords(){
     try {
         const res = await fetch(url)
         const json = await res.json()
-        const ret = JSON.parse([...prevWords, json.solution])
+        const ret = [...prevWords, json.solution]
         return ret
     } catch(err){
         console.error(err)
