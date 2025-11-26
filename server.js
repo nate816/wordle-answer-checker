@@ -30,18 +30,20 @@ const formatDateForMySql = function($date){
 }
 
 async function loadWords(){
-    const prevWords = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
+    const prevWords = fs.readFileSync(DATA_FILE, "utf8")
     const yesterday = subDays(new Date(), 1)
     const formatted = formatDateForMySql(yesterday)
     const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
 
-    await fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            const ret = [...prevWords, data.solution]
-            console.log(ret)
-            return ret
-        })
+    try {
+        const res = await fetch(url)
+        const json = await res.json()
+        const ret = JSON.parse([...prevWords, json.solution])
+        return ret
+    } catch(err){
+        console.error(err)
+    }
+
 }
 
 // ------------------------
@@ -49,10 +51,7 @@ async function loadWords(){
 // ------------------------
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
-
-    const words = await loadWords()
-
-    res.status(200).json(words)
+    res.status(200).json(loadWords())
 })
 
 app.post("/api/check-word", (req, res) => {
