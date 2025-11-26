@@ -25,7 +25,6 @@ async function loadWords(){
             const res = await fetch(url)
             if(!res.ok) continue
             const json = await res.json()
-            console.log(json)
             results.push(json.solution)
         } catch(err){
             continue
@@ -38,9 +37,12 @@ async function loadWords(){
 // ------------------------
 // API ROUTES
 // ------------------------
-app.get("/api/used-words", (req, res) => {
+app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
-    res.status(200).json(loadWords())
+
+    const words = await loadWords()
+
+    res.status(200).json(words)
 })
 
 app.post("/api/check-word", (req, res) => {
