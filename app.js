@@ -98,8 +98,6 @@ const checkWord = async(word_to_check, el_info) => {
         await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words")
             .then(r => r.json())
             .then(used_words => {
-                console.log(used_words)
-
                 // Clear previous results
                 el_info.textContent = ""
 

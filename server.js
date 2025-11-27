@@ -51,8 +51,14 @@ async function loadWords(){
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
-        const ret = [...prevWords, yesterday_answer]
-        return ret
+        // console.log(yesterday_answer)
+        if( ! prevWords.includes(yesterday_answer) ){
+            const appended = [...prevWords, yesterday_answer]
+            // write the new list of used words to disk
+            fs.writeFileSync(DATA_FILE, JSON.stringify(appended, null, 2))
+            return appended
+        }
+        return prevWords
     } catch(err){
         console.error("Failed to fetch yesterday's word:", err)
         return prevWords   // fallback to existing words
@@ -94,7 +100,7 @@ app.get(/.*/, (req, res) => {
 // ------------------------
 // Start server
 // ------------------------
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT)
 })
