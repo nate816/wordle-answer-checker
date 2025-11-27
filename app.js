@@ -107,7 +107,7 @@ const checkWord = async(word_to_check, el_info) => {
 
                     // Label (fixed width)
                     const labelSpan = document.createElement("span")
-                    labelSpan.className = "w-72 inline-block"
+                    labelSpan.className = "w-68 inline-block"
 
                     // Split the label so we can make the word bold
                     const [beforeWord, afterWord] = label.split(word_to_check)
