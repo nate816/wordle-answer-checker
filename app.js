@@ -26,80 +26,31 @@ const showEls = (els) => {
     }
 }
 
-/*
-const addToUsed = async(word_to_check) => {
-
-    await fetch("https://wordle-answer-checker-be.onrender.com/api/check-word", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: word_to_check })
-    })
-    .then(res => res.json())
-    .then(async(data) => {
-        word_to_check = word_to_check.toUpperCase()
-
-        if( ! data.valid ){
-            // hide the old add button
-            const btnAdd = document.getElementById("add")
-            hideEls([btnAdd])
-            return alert(word_to_check + " was not found in the English dictionary so it was not added to used words.")
-        }
-
-        if( ! all_words.includes(word_to_check) ){
-            return alert(word_to_check + " isn't in the Wordle dictionary, so it can't be added to used answers.")
-        }
-
-        await fetch("https://wordle-answer-checker-be.onrender.com/api/add-word", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ word: word_to_check })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if( data.used_words.includes(word_to_check) ){
-                // the requested word was found in the used_words list
-                // meaning the addition was done successfully.
-
-                // hide the old add button
-                const btnAdd = document.getElementById("add")
-                hideEls([btnAdd])
-
-                // show the result information
-                const pResult = document.getElementById("result")
-                const pWord = document.getElementById("added_word")
-                const pRest = document.getElementById("rest")
-                showEls([pResult, pWord, pRest])
-
-                pWord.textContent = word_to_check
-                pRest.textContent = " has been added to used answers."
-
-            }
-        })
-    })
-}
-*/
-
 const checkWord = async(word_to_check, el_info) => {
+
+    const endPoint = window.location.href.includes("localhost") ? ""
+        : "https://wordle-answer-checker-be.onrender.com"
 
     if( word_to_check.includes(" ") ){
         return el_info.textContent = "Spaces aren't allowed."
     }
 
-    const pWord = document.getElementById("added_word")
-    const pRest = document.getElementById("rest")
-    hideEls([pWord, pRest])
-
     if( word_to_check && word_to_check.length === 5 ){
         word_to_check = word_to_check.toUpperCase()
 
         const instructions = document.getElementById("instructions")
+        const loading = document.getElementById("loading")
         hideEls([instructions])
+        showEls([loading])
 
-        await fetch("https://wordle-answer-checker-be.onrender.com/api/used-words")
+        await fetch(endPoint + "/api/used-words")
             .then(r => r.json())
             .then(used_words => {
                 // Clear previous results
                 el_info.textContent = ""
+
+                const loading = document.getElementById("loading")
+                hideEls([loading])
 
                 const addLine = (label, value) => {
                     const line = document.createElement("div")
@@ -144,7 +95,7 @@ const checkWord = async(word_to_check, el_info) => {
                 )
 
                 addLine(
-                    "Is " + word_to_check + " in the Wordle dictionary?",
+                    "Is " + word_to_check + " a valid Wordle word?",
                     ( inDict ? "YES" : "NO")
                 )
 

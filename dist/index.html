@@ -5,10 +5,10 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32-BzoLSODX.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16-C2ZOdgJL.png">
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-CSvDHSea.png">
-        <link rel="manifest" href="/assets/site-COMVlgnI.webmanifest">
+        <link rel="manifest" href="/assets/site-gCRsbFvF.webmanifest">
         <title>Wordle Answer Checker</title>
-      <script type="module" crossorigin src="/assets/index-D2g5Sqns.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-DxsuG7tC.css">
+      <script type="module" crossorigin src="/assets/index-N9FmaLhS.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-n9ZnNCOM.css">
     </head>
 
     <body class="flex bg-linear-to-b from-slate-950 to-slate-900 text-slate-100">
@@ -19,7 +19,7 @@
             ); return false;"
         >
             <div class="flex items-center mx-auto w-fit">
-                <label for="req_word">Word: </label>
+                <label for="req_word">Answer: </label>
                 <div class="flex items-center relative">
                     <input type="text" id="req_word" maxlength="5"
                         class="w-36 py-2 px-3 mx-2 border border-dotted border-emerald-600 rounded text-lg tracking-widest uppercase caret-white"
@@ -34,29 +34,15 @@
                 </button>
             </div>
 
-            <span id="instructions" class="text-sm text-slate-400! mt-16 text-center">
-                <p>
-                    A specific NYT Wordle answer will never repeat. This utility enables you to check if a given five-letter word has ever been used and should be eliminated from consideration.
-                </p>
-                <p class="text-xs mt-6">
-                    All used answers are publicly available, and yesterday's answer is fetched from the official NYT archive. Today's answer is not included.
-                </p>
-            </span>
-
-            <p id="info" class="block w-fit mx-auto mt-10">
+            <p id="instructions" class="text-sm text-slate-400! mt-16 text-center">
+                A specific NYT Wordle answer will never repeat. This utility enables you to check if a given answer has ever been used and should be eliminated from consideration.
             </p>
 
-            <!-- <button type="button" id="add"
-                onclick="addToUsed(document.getElementById('req_word').value); return false;"
-                class="hidden bg-emerald-700 mt-6 mx-auto px-4 py-2 rounded shadow uppercase font-bold cursor-pointer"
-            >
-                add to used answers
-            </button> -->
+            <p id="loading" class="hidden text-sm text-slate-400! mt-16 w-fit mx-auto">
+                Loading results, please wait...
+            </p>
 
-            <p class="hidden mt-4 text-emerald-600" id="result">
-                <span class="font-bold underline" id="added_word"></span>
-                &nbsp;
-                <span id="rest"></span>
+            <p id="info" class="block w-fit mx-auto mt-10">
             </p>
         </form>
 

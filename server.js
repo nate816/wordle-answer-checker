@@ -9,9 +9,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// IMPORT THE SPELL CHECKER
-const checkWord = require("./server/check_word.js")
-
 const subDays = (date, days) => {
     date = date instanceof Date ? date : new Date(date)
     return date.setDate(date.getDate() - days)
@@ -73,17 +70,6 @@ app.get("/api/used-words", async(req, res) => {
     const words = await loadWords()
     // console.log("Returning words:", words)
     res.status(200).json(words)
-})
-
-app.post("/api/check-word", (req, res) => {
-    const { word } = req.body
-    try {
-        const result = checkWord(word)
-        res.json(result)
-    } catch (err) {
-        console.error("check_word.js error:", err)
-        res.status(500).json({ error: "check_word.js threw an error" })
-    }
 })
 
 // ------------------------
