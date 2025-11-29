@@ -428,6 +428,7 @@ const all_words = [
     "coast",
     "cobra",
     "cocoa",
+    "colic",
     "colon",
     "color",
     "comet",
