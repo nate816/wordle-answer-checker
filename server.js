@@ -28,7 +28,6 @@ const formatDateForMySql = function($date){
 }
 
 async function loadWords(){
-    console.log('loading words')
     let prevWords = []
     let allWords = []
 
@@ -59,7 +58,6 @@ async function loadWords(){
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
-        console.log(yesterday_answer)
         if( ! prevWords.includes(yesterday_answer) ){
             const appended = [...prevWords, yesterday_answer]
             // write the new list of used words to disk
@@ -67,8 +65,8 @@ async function loadWords(){
             return appended
         }
         // yesterday's answer should obviously be in the all_words list
-        if( ! allWords.includes(yesterday_answer) ){
-            const appended = [...allWords, yesterday_answer]
+        if( ! allWords.includes(yesterday_answer.toLowerCase()) ){
+            const appended = [...allWords, yesterday_answer.toLowerCase()]
             // write the new list of used words to disk
             fs.writeFileSync(all_words, JSON.stringify(appended, null, 2))
             return appended
@@ -89,7 +87,7 @@ async function loadWords(){
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
     const words = await loadWords()
-    console.log("Returning words:", words)
+    // console.log("Returning words:", words)
     res.status(200).json(words)
 })
 
