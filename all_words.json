@@ -1,4 +1,4 @@
-const all_words = [
+[
     "aback",
     "abase",
     "abate",
@@ -1185,6 +1185,7 @@ const all_words = [
     "maize",
     "major",
     "maker",
+    "malty",
     "mambo",
     "mamma",
     "mammy",
@@ -1270,7 +1271,7 @@ const all_words = [
     "mower",
     "mucky",
     "mucus",
-    "muddy",
+    "muggy",
     "mulch",
     "mummy",
     "munch",
@@ -2309,7 +2310,6 @@ const all_words = [
     "zebra",
     "zesty",
     "zonal",
-].concat([
     "tinge",
     "gizmo",
     "matte",
@@ -2336,7 +2336,5 @@ const all_words = [
     "kazoo",
     "balsa",
     "snafu",
-    "guano",
-]).map(x => x.toUpperCase())
-
-export default { all_words }
+    "guano"
+]

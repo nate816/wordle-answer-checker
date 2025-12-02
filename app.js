@@ -1,8 +1,4 @@
-import data from "./data.js"
-
 document.getElementById("req_word").focus()
-
-const { all_words } = data
 
 /**
  * hide the passed element(s)
@@ -87,17 +83,26 @@ const checkWord = async(word_to_check, el_info) => {
                 }
 
                 const notUsed = ! used_words.includes(word_to_check)
-                const inDict = all_words.includes(word_to_check)
+                const all_words = fetch("/all_words.json", { cache: "no-store" })
+                    .then(r => r.json())
+                    .then(all_words => {
+                        if( Array.isArray(all_words) ){
+                            const inDict = all_words.map(x => x.toUpperCase()).includes(word_to_check)
+                            addLine(
+                                "Has " + word_to_check + " never been used?",
+                                ( notUsed ? "YES" : "NO")
+                            )
 
-                addLine(
-                    "Has " + word_to_check + " never been used?",
-                    ( notUsed ? "YES" : "NO")
-                )
+                            addLine(
+                                "Is " + word_to_check + " a valid Wordle word?",
+                                ( inDict ? "YES" : "NO")
+                            )
+                        }
+                        else{
+                            addLine("An unexpected error occured.")
+                        }
+                    })
 
-                addLine(
-                    "Is " + word_to_check + " a valid Wordle word?",
-                    ( inDict ? "YES" : "NO")
-                )
 
                 // potential problems with dictionary
                 const mismatches = []

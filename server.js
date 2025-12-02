@@ -3,7 +3,8 @@ const cors = require("cors")
 const fs = require("fs")
 const path = require("path")
 const fetch = require("node-fetch")
-const DATA_FILE = path.join(__dirname, "used_words.json")
+const used_words = path.join(__dirname, "used_words.json")
+const all_words = path.join(__dirname, "all_words.json")
 
 const app = express()
 app.use(cors())
@@ -27,16 +28,26 @@ const formatDateForMySql = function($date){
 }
 
 async function loadWords(){
+    console.log('loading words')
     let prevWords = []
+    let allWords = []
 
-    // Read previous words safely
     try {
-        const data = fs.readFileSync(DATA_FILE, "utf8")
-        prevWords = JSON.parse(data)
+        const uw = fs.readFileSync(used_words, "utf8")
+        prevWords = JSON.parse(uw)
         if (!Array.isArray(prevWords)) prevWords = []
     } catch(err){
         console.warn("Failed to read or parse used_words.json, starting empty:", err.message)
         prevWords = []
+    }
+
+    try {
+        const aw = fs.readFileSync(all_words, "utf8")
+        allWords = JSON.parse(aw)
+        if (!Array.isArray(allWords)) allWords = []
+    } catch(err){
+        console.warn("Failed to read or parse all_words.json, starting empty:", err.message)
+        allWords = []
     }
 
     const yesterday = subDays(new Date(), 1)
@@ -48,14 +59,24 @@ async function loadWords(){
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
-        // console.log(yesterday_answer)
+        console.log(yesterday_answer)
         if( ! prevWords.includes(yesterday_answer) ){
             const appended = [...prevWords, yesterday_answer]
             // write the new list of used words to disk
-            fs.writeFileSync(DATA_FILE, JSON.stringify(appended, null, 2))
+            fs.writeFileSync(used_words, JSON.stringify(appended, null, 2))
             return appended
         }
+        // yesterday's answer should obviously be in the all_words list
+        if( ! allWords.includes(yesterday_answer) ){
+            const appended = [...allWords, yesterday_answer]
+            // write the new list of used words to disk
+            fs.writeFileSync(all_words, JSON.stringify(appended, null, 2))
+            return appended
+        }
+
+        // only return verified used words
         return prevWords
+
     } catch(err){
         console.error("Failed to fetch yesterday's word:", err)
         return prevWords   // fallback to existing words
@@ -68,7 +89,7 @@ async function loadWords(){
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
     const words = await loadWords()
-    // console.log("Returning words:", words)
+    console.log("Returning words:", words)
     res.status(200).json(words)
 })
 
