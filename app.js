@@ -102,21 +102,6 @@ const checkWord = async(word_to_check, el_info) => {
                             addLine("An unexpected error occured.")
                         }
                     })
-
-
-                // potential problems with dictionary
-                const mismatches = []
-
-                for(const word of used_words){
-                    if( ! all_words.includes(word) ){
-                        mismatches.push(word)
-                    }
-                }
-
-                if( mismatches.length ){
-                    console.log("\nNOTE: some used words are not in the so-called dictionary...")
-                    console.log(JSON.stringify(mismatches))
-                }
             })
     }
 
