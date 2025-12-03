@@ -64,19 +64,16 @@ async function loadWords(){
             const appended = [...allWords, yesterday_answer.toLowerCase()]
             // write the new list of used words to disk
             fs.writeFileSync(all_words, JSON.stringify(appended, null, 2))
-            console.log('all_words: ', appended)
         }
 
         if( ! prevWords.includes(yesterday_answer) ){
             const appended = [...prevWords, yesterday_answer]
             // write the new list of used words to disk
             fs.writeFileSync(used_words, JSON.stringify(appended, null, 2))
-            console.log('returning ', appended)
             return appended
         }
 
         // only return verified used words
-        console.log('returning ', prevWords)
         return prevWords
 
     } catch(err){
@@ -91,7 +88,6 @@ async function loadWords(){
 app.get("/api/used-words", async(req, res) => {
     console.log("Request received for /api/used-words")
     const words = await loadWords()
-    console.log("Returning words:", words)
     res.status(200).json(words)
 })
 

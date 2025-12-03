@@ -86,7 +86,6 @@ const checkWord = async(word_to_check, el_info) => {
                 const all_words = fetch(endPoint + "/data/all_words.json", { cache: "no-store" })
                     .then(r => r.json())
                     .then(all_words => {
-                        console.log('all words: '+ all_words)
                         if( Array.isArray(all_words) ){
                             const inDict = all_words.map(x => x.toUpperCase()).includes(word_to_check)
                             addLine(
