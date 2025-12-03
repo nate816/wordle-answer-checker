@@ -58,17 +58,18 @@ async function loadWords(){
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
-        if( ! prevWords.includes(yesterday_answer) ){
-            const appended = [...prevWords, yesterday_answer]
-            // write the new list of used words to disk
-            fs.writeFileSync(used_words, JSON.stringify(appended, null, 2))
-            return appended
-        }
+
         // yesterday's answer should obviously be in the all_words list
         if( ! allWords.includes(yesterday_answer.toLowerCase()) ){
             const appended = [...allWords, yesterday_answer.toLowerCase()]
             // write the new list of used words to disk
             fs.writeFileSync(all_words, JSON.stringify(appended, null, 2))
+        }
+
+        if( ! prevWords.includes(yesterday_answer) ){
+            const appended = [...prevWords, yesterday_answer]
+            // write the new list of used words to disk
+            fs.writeFileSync(used_words, JSON.stringify(appended, null, 2))
             return appended
         }
 
