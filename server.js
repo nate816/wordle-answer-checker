@@ -95,6 +95,8 @@ app.get("/api/used-words", async(req, res) => {
     res.status(200).json(words)
 })
 
+app.use("/data", express.static(__dirname))
+
 // ------------------------
 // Serve static frontend
 // ------------------------

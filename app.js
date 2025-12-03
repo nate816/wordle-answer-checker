@@ -83,7 +83,7 @@ const checkWord = async(word_to_check, el_info) => {
                 }
 
                 const notUsed = ! used_words.includes(word_to_check)
-                const all_words = fetch(endPoint + "/all_words.json", { cache: "no-store" })
+                const all_words = fetch(endPoint + "/data/all_words.json", { cache: "no-store" })
                     .then(r => r.json())
                     .then(all_words => {
                         console.log('all words: '+ all_words)
