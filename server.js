@@ -53,11 +53,14 @@ async function loadWords(){
     const formatted = formatDateForMySql(yesterday)
     const url = `https://www.nytimes.com/svc/wordle/v2/${formatted}.json`
 
+    // console.log(url)
+
     try {
         const res = await fetch(url)
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
+        // console.log(yesterday_answer)
 
         // yesterday's answer should obviously be in the all_words list
         if( ! allWords.includes(yesterday_answer.toLowerCase()) ){
