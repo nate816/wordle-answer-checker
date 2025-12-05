@@ -66,12 +66,14 @@ async function loadWords(){
         if( ! allWords.includes(yesterday_answer.toLowerCase()) ){
             const appended = [...allWords, yesterday_answer.toLowerCase()]
             // write the new list of used words to disk
+            console.log('adding '+yesterday_answer.toLowerCase()+' to all_words')
             fs.writeFileSync(all_words, JSON.stringify(appended, null, 2))
         }
 
         if( ! prevWords.includes(yesterday_answer) ){
             const appended = [...prevWords, yesterday_answer]
             // write the new list of used words to disk
+            console.log('adding '+yesterday_answer+' to used_words')
             fs.writeFileSync(used_words, JSON.stringify(appended, null, 2))
             return appended
         }
