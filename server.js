@@ -60,7 +60,7 @@ async function loadWords(){
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = await res.json()
         const yesterday_answer = json.solution.toUpperCase()
-        // console.log(yesterday_answer)
+        console.log("yesterday's answer: " + yesterday_answer)
 
         // yesterday's answer should obviously be in the all_words list
         if( ! allWords.includes(yesterday_answer.toLowerCase()) ){
