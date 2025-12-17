@@ -35,9 +35,8 @@ const checkWord = async(word_to_check, el_info) => {
         word_to_check = word_to_check.toUpperCase()
 
         const instructions = document.getElementById("instructions")
-        const info = document.getElementById("info")
         const loading = document.getElementById("loading")
-        hideEls([instructions, info])
+        hideEls([instructions])
         showEls([loading])
 
         await fetch(endPoint + "/api/used-words")
